@@ -10,13 +10,13 @@ import org.junit.Test;
 public class EarDeploymentTest {
 
 	@Test
-	public void testGetInstance() {
+	public void testCreate() {
 		EnterpriseArchive enterpriseArchive = new EarDeployment("test.ear") {
 			{
-				javaArchives.add(ShrinkWrap.create(JavaArchive.class, "lib1.jar"));
+				earLibraries.add(ShrinkWrap.create(JavaArchive.class, "lib1.jar"));
 
 			}
-		}.getInstance();
+		}.create();
 		assertNotNull(enterpriseArchive);
 	}
 
