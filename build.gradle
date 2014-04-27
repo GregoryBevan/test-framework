@@ -65,7 +65,6 @@ artifactory {
 }
 
 dependencies {
-	compile 'javax:javaee-api:7.0'
 	compile 'junit:junit:4.11'
 	compile 'org.jboss.arquillian.junit:arquillian-junit-container:1.1.4.Final'
 	compile 'org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-javaee:2.0.0-alpha-6'
