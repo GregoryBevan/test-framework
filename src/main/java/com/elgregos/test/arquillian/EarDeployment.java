@@ -26,10 +26,10 @@ public abstract class EarDeployment {
 	
 	protected EjbJarDescriptor ejbJarDescriptor = Descriptors.create(EjbJarDescriptor.class);
 
-	public EarDeployment(String earName, final Class<?> testClass) {
+	public EarDeployment(String earName) {		
 		enterpriseArchive = ShrinkWrap.create(EnterpriseArchive.class, earName);
 		webArchive = ShrinkWrap.create(WebArchive.class, "web.war");
-		webArchive.addClass(testClass);
+		webArchive.addClasses(EarDeployment.class,this.getClass().getEnclosingClass());
 		webAppDescriptor.version("3.1");
 		ejbModule = ShrinkWrap.create(JavaArchive.class, "service.jar");
 		ejbJarDescriptor.version("3.2");

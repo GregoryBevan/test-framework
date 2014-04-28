@@ -11,7 +11,7 @@ public class EarDeploymentTest {
 
 	@Test
 	public void testCreate() {
-		EnterpriseArchive enterpriseArchive = new EarDeployment("test.ear", EarDeploymentTest.class) {
+		EnterpriseArchive enterpriseArchive = new EarDeployment("test.ear") {
 			{
 				earLibraries.add(ShrinkWrap.create(JavaArchive.class, "lib1.jar"));
 
