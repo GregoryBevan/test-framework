@@ -14,9 +14,9 @@ import org.jboss.shrinkwrap.descriptor.api.webapp30.WebAppDescriptor;
 
 public abstract class EarDeployment {
 
-	protected final EnterpriseArchive enterpriseArchive;
+	protected EnterpriseArchive enterpriseArchive;
 
-	protected final WebArchive webArchive;
+	protected WebArchive webArchive;
 
 	protected List<JavaArchive> earLibraries;
 	
@@ -26,21 +26,19 @@ public abstract class EarDeployment {
 	
 	protected EjbJarDescriptor ejbJarDescriptor = Descriptors.create(EjbJarDescriptor.class);
 
-	public EarDeployment(String earName) {
+	public EarDeployment(String earName, final Class<?> testClass) {
 		enterpriseArchive = ShrinkWrap.create(EnterpriseArchive.class, earName);
-		webArchive = ShrinkWrap.create(WebArchive.class);
+		webArchive = ShrinkWrap.create(WebArchive.class, "web.war");
+		webArchive.addClass(testClass);
 		webAppDescriptor.version("3.1");
-		ejbModule = ShrinkWrap.create(JavaArchive.class);
+		ejbModule = ShrinkWrap.create(JavaArchive.class, "service.jar");
 		ejbJarDescriptor.version("3.2");
 		earLibraries = new ArrayList<>();
 	}
 
 	public EnterpriseArchive create() {
 		webArchive.setWebXML(new StringAsset(webAppDescriptor.exportAsString()));
-		enterpriseArchive.addAsModule(webArchive);
-		enterpriseArchive.addAsModule(ejbModule);
-		enterpriseArchive.addAsLibraries(earLibraries);	
-		return enterpriseArchive;
+		return enterpriseArchive.addAsModule(webArchive).addAsModule(ejbModule).addAsLibraries(earLibraries);
 	}
 
 }
