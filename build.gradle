@@ -15,14 +15,14 @@ sourceCompatibility = '8'
 buildscript {
 	repositories {
 		maven {
-			url 'http://elgregos.com:8081/artifactory/elgregos'
+			url 'http://elgregos.com/artifactory/elgregos'
 			credentials {
 				username = "${artifactory_user}"
 				password = "${artifactory_password}"
 			}
 		}
 		ivy {
-			url 'http://elgregos.com:8081/artifactory/elgregos'
+			url 'http://elgregos.com/artifactory/elgregos'
 			credentials {
 				username = "${artifactory_user}"
 				password = "${artifactory_password}"
