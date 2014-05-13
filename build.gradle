@@ -68,6 +68,7 @@ dependencies {
 	compile 'junit:junit:4.11'
 	compile 'org.jboss.arquillian.junit:arquillian-junit-container:1.1.4.Final'
 	compile 'org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-javaee:2.0.0-alpha-6'
+	compile 'org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-depchain:2.2.0-alpha-2'
 }
 
 artifactoryPublish {
