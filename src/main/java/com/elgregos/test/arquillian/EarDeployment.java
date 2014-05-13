@@ -26,7 +26,7 @@ public abstract class EarDeployment {
 	
 	protected EjbJarDescriptor ejbJarDescriptor = Descriptors.create(EjbJarDescriptor.class);
 
-	public EarDeployment(String earName) {		
+	public EarDeployment(String earName) {
 		enterpriseArchive = ShrinkWrap.create(EnterpriseArchive.class, earName);
 		webArchive = ShrinkWrap.create(WebArchive.class, "web.war");
 		webArchive.addClasses(EarDeployment.class,this.getClass().getEnclosingClass());
@@ -34,6 +34,8 @@ public abstract class EarDeployment {
 		ejbModule = ShrinkWrap.create(JavaArchive.class, "service.jar");
 		ejbJarDescriptor.version("3.2");
 		earLibraries = new ArrayList<>();
+		JavaArchive testClassesJar = ShrinkWrap.create(JavaArchive.class, "test.jar").addClasses(EarDeployment.class,this.getClass().getEnclosingClass());
+		earLibraries.add(testClassesJar);
 	}
 
 	public EnterpriseArchive create() {
