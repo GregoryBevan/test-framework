@@ -19,28 +19,28 @@ public abstract class EarDeployment {
 	protected WebArchive webArchive;
 
 	protected List<JavaArchive> earLibraries;
-	
+
 	protected JavaArchive ejbModule;
 
 	protected WebAppDescriptor webAppDescriptor = Descriptors.create(WebAppDescriptor.class);
-	
+
 	protected EjbJarDescriptor ejbJarDescriptor = Descriptors.create(EjbJarDescriptor.class);
 
-	public EarDeployment(String earName) {
-		enterpriseArchive = ShrinkWrap.create(EnterpriseArchive.class, earName);
-		webArchive = ShrinkWrap.create(WebArchive.class, "web.war");
-		webArchive.addClasses(EarDeployment.class,this.getClass().getEnclosingClass());
-		webAppDescriptor.version("3.1");
-		ejbModule = ShrinkWrap.create(JavaArchive.class, "service.jar");
-		ejbJarDescriptor.version("3.2");
-		earLibraries = new ArrayList<>();
-		JavaArchive testClassesJar = ShrinkWrap.create(JavaArchive.class, "test.jar").addClasses(EarDeployment.class,this.getClass().getEnclosingClass());
-		earLibraries.add(testClassesJar);
+	public EarDeployment(final String earName) {
+		this.enterpriseArchive = ShrinkWrap.create(EnterpriseArchive.class, earName);
+		this.webArchive = ShrinkWrap.create(WebArchive.class, "web.war");
+		this.webAppDescriptor.version("3.1");
+		this.ejbModule = ShrinkWrap.create(JavaArchive.class, "service.jar");
+		this.ejbJarDescriptor.version("3.2");
+		this.earLibraries = new ArrayList<>();
+		final JavaArchive testClassesJar = ShrinkWrap.create(JavaArchive.class, "test.jar").addClasses(EarDeployment.class,
+				this.getClass().getEnclosingClass());
+		this.earLibraries.add(testClassesJar);
 	}
 
 	public EnterpriseArchive create() {
-		webArchive.setWebXML(new StringAsset(webAppDescriptor.exportAsString()));
-		return enterpriseArchive.addAsModule(webArchive).addAsModule(ejbModule).addAsLibraries(earLibraries);
+		this.webArchive.setWebXML(new StringAsset(this.webAppDescriptor.exportAsString()));
+		return this.enterpriseArchive.addAsModule(this.webArchive).addAsModule(this.ejbModule).addAsLibraries(this.earLibraries);
 	}
 
 }
