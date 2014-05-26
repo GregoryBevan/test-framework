@@ -1,11 +1,11 @@
 package com.elgregos.test.arquillian.wildfly;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.jboss.as.cli.CommandContext;
-import org.jboss.as.cli.CommandLineException;
 import org.jboss.as.cli.scriptsupport.CLI;
 
 /**
@@ -13,14 +13,10 @@ import org.jboss.as.cli.scriptsupport.CLI;
  *
  * @author Grégory
  */
+@Slf4j
 public class WildFlyCliInvoker {
 
-	private CommandContext commandContext;
-
 	private WildFlyCliInvoker() {
-		final CLI cli = CLI.newInstance();
-		cli.connect();
-		this.commandContext = cli.getCommandContext();
 	}
 
 	/**
@@ -32,17 +28,17 @@ public class WildFlyCliInvoker {
 		return new WildFlyCliInvoker();
 	}
 
-	public void processCliScript(final File script) throws WildFlyCliInvokerException {
-		String command = "";
-		try (final Scanner scanner = new Scanner(script)) {
+	public void processCliScript(final File file) {
+		final CLI cli = CLI.newInstance();
+		cli.connect();
+		final CommandContext commandContext = cli.getCommandContext();
+		try (final Scanner scanner = new Scanner(file)) {
 			while (scanner.hasNextLine()) {
-				command = scanner.nextLine();
-				this.commandContext.handle(command);
+				final String command = scanner.nextLine();
+				commandContext.handle(command);
 			}
-		} catch (final FileNotFoundException fnfe) {
-			throw new WildFlyCliInvokerException("Cli script has not been found. Check the file path", fnfe);
-		} catch (final CommandLineException cle) {
-			throw new WildFlyCliInvokerException("An error occurred while executing command : " + command, cle);
+		} catch (final Throwable th) {
+			log.error("An error occurred while processing CLI script", th);
 		}
 	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -12,8 +13,8 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptors;
 import org.jboss.shrinkwrap.descriptor.api.ejbjar32.EjbJarDescriptor;
 import org.jboss.shrinkwrap.descriptor.api.webapp30.WebAppDescriptor;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.jboss.shrinkwrap.resolver.api.maven.MavenStrategyStage;
+
+import com.elgregos.test.arquillian.resolver.ArtifactoryResolver;
 
 public abstract class EarDeployment {
 
@@ -36,22 +37,16 @@ public abstract class EarDeployment {
 		this.webArchive = ShrinkWrap.create(WebArchive.class, "web.war");
 		this.webAppDescriptor.version("3.1");
 		this.ejbModule = ShrinkWrap.create(JavaArchive.class, "service.jar");
-		this.ejbModule.addClass(String.class);
+		this.ejbModule.addClass(DummyForEJBDeployment.class);
 		this.ejbJarDescriptor.version("3.2");
 		this.earLibraries = new ArrayList<>();
-		final JavaArchive testClassesJar = ShrinkWrap.create(JavaArchive.class, "test.jar").addClasses(EarDeployment.class,
-				this.getClass().getEnclosingClass());
+		final JavaArchive testClassesJar = ShrinkWrap.create(JavaArchive.class, "test.jar")
+				.addClasses(EarDeployment.class, this.getClass().getEnclosingClass()).addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 		this.earLibraries.add(testClassesJar);
 	}
 
 	public EarDeployment addGradleDependency(final String dependency, final boolean transitive) {
-		final MavenStrategyStage resolve = Maven.resolver().resolve(dependency);
-		File[] dependencies;
-		if (transitive) {
-			dependencies = resolve.withTransitivity().asFile();
-		} else {
-			dependencies = resolve.withoutTransitivity().asFile();
-		}
+		final File[] dependencies = ArtifactoryResolver.getInstance().getDependencyFiles(dependency, transitive);
 		for (final File dependencyFile : dependencies) {
 			this.earLibraries.add(ShrinkWrap.createFromZipFile(JavaArchive.class, dependencyFile));
 		}

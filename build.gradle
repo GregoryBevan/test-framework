@@ -2,6 +2,7 @@ apply plugin: 'eclipse'
 apply plugin: 'java'
 apply plugin: 'artifactory'
 apply plugin: 'project-report'
+apply plugin: 'maven'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
@@ -42,7 +43,7 @@ artifactory {
 			repoKey = 'elgregos-release-local'
 			username = "${artifactory_user}"
 			password = "${artifactory_password}"
-			maven = false
+			maven = true
 			ivy {
 				ivyLayout = '[organization]/[module]/ivy-[revision].xml'
 				artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
@@ -66,6 +67,7 @@ artifactory {
 
 dependencies {
 	compile 'org.projectlombok:lombok:1.12.6'
+	compile 'org.slf4j:slf4j-api:1.7.6'	
 	compile 'junit:junit:4.11'
 	compile 'org.jboss.arquillian.junit:arquillian-junit-container:1.1.4.Final'
 	compile 'org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-javaee:2.0.0-alpha-6'
