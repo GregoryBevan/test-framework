@@ -20,11 +20,7 @@ public class WildFlyCliInvokerTest {
 
 	@Test
 	public void testProcessCliScript() {
-		// try {
 		WildFlyCliInvoker.newInstance().processCliScript(new File(this.getClass().getClassLoader().getResource("script.cli").getFile()));
-		// } catch (final WildFlyCliInvokerException e) {
-		// Assert.fail(e.getMessage());
-		// }
 	}
 
 }
