@@ -33,7 +33,7 @@ public class ArtifactoryResolverTest {
 
 	@Test
 	public void testGetPublishedDependencyFileOnly() {
-		final File[] dependencyFiles = this.artifactoryResolver.getDependencyFiles("elgregos:test-framework:1.0.0", false);
+		final File[] dependencyFiles = this.artifactoryResolver.getDependencyFiles("com.elgregos:test-framework:1.0.0", false);
 		Assert.assertNotNull(dependencyFiles);
 		Assert.assertEquals(1, dependencyFiles.length);
 		Assert.assertEquals("test-framework-1.0.0.jar", dependencyFiles[0].getName());
@@ -45,7 +45,7 @@ public class ArtifactoryResolverTest {
 	@Test
 	@Ignore
 	public void testGetNotExistingDependencyFile() {
-		final File[] dependencyFiles = this.artifactoryResolver.getDependencyFiles("elgregos:test-frameworks:1.0.0", false);
+		final File[] dependencyFiles = this.artifactoryResolver.getDependencyFiles("com.elgregos:test-frameworks:1.0.0", false);
 		Assert.assertNotNull(dependencyFiles);
 		Assert.assertEquals(5, dependencyFiles.length);
 	}

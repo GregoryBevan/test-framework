@@ -5,10 +5,10 @@ apply plugin: 'project-report'
 apply plugin: 'maven'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = '2.1'
 }
 
-group='elgregos'
+group='com.elgregos'
 version='1.0.0'
 
 sourceCompatibility = '8'
@@ -32,7 +32,7 @@ buildscript {
 	}
 
 	dependencies {
-		classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:2.2.3'		
+		classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:2.2.5'		
     }
 }
 
@@ -66,13 +66,13 @@ artifactory {
 }
 
 dependencies {
-	compile 'org.projectlombok:lombok:1.12.6'
+	compile 'org.projectlombok:lombok:1.14.8'
 	compile 'org.slf4j:slf4j-api:1.7.6'	
 	compile 'junit:junit:4.11'
-	compile 'org.jboss.arquillian.junit:arquillian-junit-container:1.1.4.Final'
+	compile 'org.jboss.arquillian.junit:arquillian-junit-container:1.1.5.Final'
 	compile 'org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-javaee:2.0.0-alpha-6'
-	compile 'org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-depchain:2.2.0-alpha-2'
-	compile 'org.wildfly:wildfly-arquillian-container-embedded:8.0.0.Final'
+	compile 'org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-depchain:2.2.0-beta-1'
+	compile 'org.wildfly:wildfly-arquillian-container-embedded:8.1.0.Final'
 }
 
 test {
