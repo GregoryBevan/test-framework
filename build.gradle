@@ -67,7 +67,7 @@ artifactory {
 
 dependencies {
 	compile 'org.projectlombok:lombok:1.14.8'
-	compile 'org.slf4j:slf4j-api:1.7.6'	
+	compile 'org.slf4j:slf4j-api:1.7.7'	
 	compile 'junit:junit:4.11'
 	compile 'org.jboss.arquillian.junit:arquillian-junit-container:1.1.5.Final'
 	compile 'org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-javaee:2.0.0-alpha-6'
