@@ -1,4 +1,4 @@
 test-framework
 ==============
 
-Contains classes for testing applications
+Contains base classes to test applications with Arquillian
