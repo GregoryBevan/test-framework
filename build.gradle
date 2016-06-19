@@ -1,84 +1,53 @@
-apply plugin: 'eclipse'
-apply plugin: 'java'
-apply plugin: 'artifactory'
-apply plugin: 'project-report'
-apply plugin: 'maven'
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.1'
-}
-
-group='com.elgregos'
-version='1.0.0'
-
-sourceCompatibility = '8'
-
 buildscript {
 	repositories {
-		maven {
-			url 'http://elgregos.com/artifactory/elgregos'
-			credentials {
-				username = "${artifactory_user}"
-				password = "${artifactory_password}"
-			}
-		}
-		ivy {
-			url 'http://elgregos.com/artifactory/elgregos'
-			credentials {
-				username = "${artifactory_user}"
-				password = "${artifactory_password}"
-			}
-		}
+		jcenter()
 	}
-
-	dependencies {
-		classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:2.2.5'		
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+	    classpath 'io.spring.gradle:dependency-management-plugin:0.5.7.RELEASE'
     }
 }
 
-artifactory {
-	contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
-	publish {
-		repository {
-			repoKey = 'elgregos-release-local'
-			username = "${artifactory_user}"
-			password = "${artifactory_password}"
-			maven = true
-			ivy {
-				ivyLayout = '[organization]/[module]/ivy-[revision].xml'
-				artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
-				mavenCompatible = true
-			}
-		}
-	}
-	resolve {
-		repository {
-			repoKey = 'elgregos'
-			username = "${artifactory_user}"
-			password = "${artifactory_password}"
-			ivy {
-				ivyLayout = '[organization]/[module]/ivy-[revision].xml'
-				artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
-				mavenCompatible = true
-			}
-		}
-	}
+plugins {
+	id "java"
+	id "maven"
+	id "io.spring.dependency-management" version "0.5.7.RELEASE"
+	id "com.jfrog.bintray" version "1.6"
+}
+
+sourceCompatibility = '8'
+
+repositories {
+	jcenter()
+	mavenLocal()
+}
+
+dependencyManagement {
+  imports {
+    mavenBom 'org.arquillian:arquillian-universe:1.0.0.Alpha3'
+  }
+}
+
+configurations {
+	wildfly
 }
 
 dependencies {
-	compile 'org.projectlombok:lombok:1.14.8'
+	compile 'org.projectlombok:lombok:1.16.8'
 	compile 'org.slf4j:slf4j-api:1.7.7'	
-	compile 'junit:junit:4.11'
-	compile 'org.jboss.arquillian.junit:arquillian-junit-container:1.1.5.Final'
-	compile 'org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-javaee:2.0.0-alpha-6'
-	compile 'org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-depchain:2.2.0-beta-1'
-	compile 'org.wildfly:wildfly-arquillian-container-embedded:8.1.0.Final'
+	compile 'junit:junit:4.12'
+	compile 'org.arquillian.universe:arquillian-junit'
+	compile 'org.wildfly.arquillian:wildfly-arquillian-container-embedded:2.0.0.Final'
+	compile 'org.wildfly.core:wildfly-embedded:2.1.0.Final'
+	compile 'org.wildfly.core:wildfly-cli:2.1.0.Final'
+	wildfly 'org.wildfly:wildfly-dist:10.0.0.Final@zip'
+}
+
+task resolveWildFly(type: Copy) {
+    destinationDir = file("build")
+    from { zipTree(configurations.wildfly.singleFile) }
 }
 
 test {
     systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
-}
-
-artifactoryPublish {
-    publishConfigs ('archives')
 }
