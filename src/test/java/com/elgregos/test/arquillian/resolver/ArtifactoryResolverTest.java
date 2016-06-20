@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class ArtifactoryResolverTest {
 
 	private ArtifactoryResolver artifactoryResolver;
@@ -31,22 +32,24 @@ public class ArtifactoryResolverTest {
 		Assert.assertEquals(2, dependencyFiles.length);
 	}
 
-	@Test
-	public void testGetPublishedDependencyFileOnly() {
-		final File[] dependencyFiles = this.artifactoryResolver.getDependencyFiles("com.elgregos:test-framework:1.0.0", false);
-		Assert.assertNotNull(dependencyFiles);
-		Assert.assertEquals(1, dependencyFiles.length);
-		Assert.assertEquals("test-framework-1.0.0.jar", dependencyFiles[0].getName());
-	}
-
 	/**
 	 * Failed every tests...
 	 */
 	@Test
 	@Ignore
 	public void testGetNotExistingDependencyFile() {
-		final File[] dependencyFiles = this.artifactoryResolver.getDependencyFiles("com.elgregos:test-frameworks:1.0.0", false);
+		final File[] dependencyFiles = this.artifactoryResolver.getDependencyFiles("com.elgregos:test-frameworks:1.0.0",
+				false);
 		Assert.assertNotNull(dependencyFiles);
 		Assert.assertEquals(5, dependencyFiles.length);
+	}
+
+	@Test
+	public void testGetPublishedDependencyFileOnly() {
+		final File[] dependencyFiles = this.artifactoryResolver.getDependencyFiles("com.elgregos:test-framework:1.0.0",
+				false);
+		Assert.assertNotNull(dependencyFiles);
+		Assert.assertEquals(1, dependencyFiles.length);
+		Assert.assertEquals("test-framework-1.0.0.jar", dependencyFiles[0].getName());
 	}
 }
