@@ -26,6 +26,9 @@ dependencyManagement {
   imports {
     mavenBom 'org.arquillian:arquillian-universe:1.0.0.Alpha3'
   }
+  dependencies {
+  	dependency 'org.arquillian.universe:arquillian-junit:1.0.0.Alpha3' 
+  }
 }
 
 configurations {
@@ -72,6 +75,16 @@ publishing {
             version project.version
         }
     }
+}
+
+publishing.publications.all {
+  pom.withXml {
+    asNode().dependencies.'*'.findAll() {
+      it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+        dep.name == it.artifactId.text()
+      }
+    }.each { it.scope*.value = 'compile'}
+  }
 }
 
 task resolveWildFly(type: Copy) {
