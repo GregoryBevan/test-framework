@@ -11,6 +11,7 @@ buildscript {
 plugins {
 	id "java"
 	id "maven"
+	id "maven-publish"
 	id "io.spring.dependency-management" version "0.5.7.RELEASE"
 	id "com.jfrog.bintray" version "1.6"
 }
@@ -19,7 +20,6 @@ sourceCompatibility = '8'
 
 repositories {
 	jcenter()
-	mavenLocal()
 }
 
 dependencyManagement {
@@ -41,6 +41,37 @@ dependencies {
 	compile 'org.wildfly.core:wildfly-embedded:2.1.0.Final'
 	compile 'org.wildfly.core:wildfly-cli:2.1.0.Final'
 	wildfly 'org.wildfly:wildfly-dist:10.0.0.Final@zip'
+}
+
+bintray {
+    user = project.property('bintray_user')
+    key = project.property('bintray_api_key')
+    
+    publications = ['MyPublication'] 
+    publish = true
+    pkg {
+        repo = 'maven'
+        name = project.name
+        userOrg = project.property('bintray_user')
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/GregoryBevan/test-framework.git'
+        version {
+	        name = project.version
+	        desc = 'Test framework'
+	        vcsTag = project.version
+	    }
+    }
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId project.name
+            version project.version
+        }
+    }
 }
 
 task resolveWildFly(type: Copy) {
